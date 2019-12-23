@@ -50,19 +50,21 @@ const determineSnippetRanking = snippet => {
   // Combine content for indexing
   const indexableContent = [
     snippet.title,
-    snippet.attributes.codeBlocks.src,
-    snippet.attributes.codeBlocks.es6,
-    snippet.attributes.codeBlocks.css,
-    snippet.attributes.codeBlocks.html,
-    snippet.attributes.codeBlocks.js,
-    snippet.attributes.codeBlocks.style,
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.src || '',
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.es6 || '',
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.css || '',
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.html || '',
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.js || '',
+    snippet.attributes.codeBlocks && snippet.attributes.codeBlocks.style || '',
     snippet.attributes.text,
   ].join(' ');
 
   // Add points from tags
-  score += snippet.attributes.tags.reduce((a, v) =>
-    snippet.tagScores[v] ? a + snippet.tagScores[v] : a, 0
-  );
+  score += snippet.attributes.tags.reduce((a, v) => {
+    if(snippet.tagScores && snippet.tagScores[v])
+      return snippet.tagScores[v] ? a + snippet.tagScores[v] : a;
+    return 0;
+  }, 0);
   score = Math.min(score, rankingEngine.tagScorelimit);
 
   // Add points from expertise

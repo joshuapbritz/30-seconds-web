@@ -16,12 +16,12 @@ const determineRecommendedSnippetsWithoutContext = snippetNodes => {
     const freshnessValue = mapNumRange(freshnessMaxValue - node[1].meta.lastUpdated, freshnessMaxDifference, 0, 0.0, recomendationEngine.noContextFreshnessMultiplier).toFixed(4);
     const indexableContent = [
       node[1].title,
-      node[1].attributes.codeBlocks.src,
-      node[1].attributes.codeBlocks.es6,
-      node[1].attributes.codeBlocks.css,
-      node[1].attributes.codeBlocks.html,
-      node[1].attributes.codeBlocks.js,
-      node[1].attributes.codeBlocks.style,
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.src || '',
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.es6 || '',
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.css || '',
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.html || '',
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.js || '',
+      node[1].attributes.codeBlocks && node[1].attributes.codeBlocks.style || '',
       node[1].attributes.text,
     ].join(' ');
 
@@ -42,6 +42,10 @@ const determineRecommendedSnippetsWithoutContext = snippetNodes => {
 };
 
 const determineRecommendedSnippetsWithContext = (snippetNodes, snippetContext) => {
+  // TODO: Make this work for blog posts
+  if(!snippetContext.node.language || snippetContext.node.language.short)
+    return [];
+
   let relatedSnippets = snippetNodes
     .filter(v =>
       v.node.language.short === snippetContext.node.language.short
