@@ -9,7 +9,7 @@ export default {
   slug: 'react',
   reducer: 'jsxReducer',
   resolver: 'jsxResolver',
-  featured: 4,
+  featured: 5,
   theme: {
     backColor: '#282c34',
     foreColor: '#61dafb',
